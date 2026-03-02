@@ -16,11 +16,13 @@
 
 ## Overview
 
-Wikshi is the first credit-aware lending protocol built on Creditcoin. Unlike traditional DeFi lending where every borrower faces identical collateral requirements regardless of history, Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms.
+Wikshi is the first credit-aware lending protocol built on Creditcoin. It combines two pillars that directly serve Creditcoin's mission of bridging DeFi and TradFi for the world's 1.4B unbanked:
 
-**Core thesis**: Credit data should have *consequences*, not just visibility.
+**1. Credit-Native Lending** — Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms. A borrower with 10+ verified repayments earns a higher trust tier and better collateral ratios. Liquidation triggers credit slashing. Inactive scores decay. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
 
-A borrower with 10+ verified repayments across Ethereum, Polygon, or any USC-supported chain earns a higher trust tier and better collateral ratios. A borrower who gets liquidated sees their credit score slashed. Inactive scores decay over time. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
+**2. Real-World Asset Collateral** — Wikshi tokenizes real-world loan receivables (from Gluwa's Loan.sol, Aella microfinance, and Creditcoin's 5M+ native loan transactions) into ERC-721 NFTs, wraps them into fungible ERC-20 tokens, prices them using an on-chain credit-adjusted DCF model, and accepts them as collateral in lending markets. This is the RWA-to-DeFi pipeline that Creditcoin was built for.
+
+**Core thesis**: Credit data should have *consequences*, not just visibility. Real-world assets should be *usable*, not just recorded.
 
 ---
 
@@ -167,6 +169,75 @@ graph LR
 - **USC Cross-Chain**: `PaymentMade`, Gluwa `Loan.sol` events (`LoanRepaid`, `LoanExpired`, `LoanLateRepayment`)
 - **Creditcoin Native**: `LoanFundInitiated`, `LoanRepaid`, `LoanLateRepayment`, `LoanExpired`
 - **Off-Chain**: Credal operator (pluggable scoring model)
+
+---
+
+## Real-World Assets (RWA) as Collateral
+
+Creditcoin's core mission is bridging DeFi and TradFi through real-world assets — 5M+ loan transactions, $80M+ credit volume, partnerships with Aella and microfinance institutions across emerging markets. Wikshi is built to serve this thesis directly.
+
+We implement a **full RWA receivables pipeline** (~950 lines across 4 contracts) that converts real-world loans into on-chain collateral for DeFi lending. This is the first tokenized receivable collateral system on Creditcoin.
+
+```mermaid
+graph LR
+    subgraph External["Real-World Loan"]
+        GL[Gluwa Loan.sol<br/>Aella / Microfinance]
+        CL[Creditcoin L1<br/>Substrate Loan Cycles]
+    end
+
+    subgraph Tokenize["Tokenization"]
+        REC[WikshiReceivable<br/>ERC-721 NFT per Loan]
+    end
+
+    subgraph Wrap["Fungibility"]
+        WREC[WikshiReceivableWrapper<br/>NFT → wREC ERC-20]
+    end
+
+    subgraph Value["Valuation"]
+        ORC[WikshiReceivableOracle<br/>Credit-Adjusted DCF]
+    end
+
+    subgraph Lend["DeFi Collateral"]
+        WL[WikshiLend<br/>Borrow Against wREC]
+    end
+
+    subgraph Liquidate["Risk Management"]
+        LR[WikshiLiquidationRouter<br/>Atomic Unwrap to Liquidator]
+    end
+
+    GL --> REC
+    CL --> REC
+    REC --> WREC
+    WREC --> ORC
+    ORC --> WL
+    WL --> LR
+    LR --> WREC
+```
+
+### How It Works
+
+1. **Loan Origination** — A real-world loan is funded via Gluwa's Loan.sol (Aella, microfinance) or Creditcoin's native loan cycles (5M+ transactions recorded via Credal API)
+2. **NFT Tokenization** — `WikshiReceivable` mints an ERC-721 NFT representing the lender's right to repayment. Each NFT embeds principal, interest rate, maturity, borrower, and cross-chain source metadata (`sourceChainKey` + `sourceLoanHash` for deduplication)
+3. **ERC-20 Wrapping** — `WikshiReceivableWrapper` converts the illiquid NFT into fungible `wREC` ERC-20 tokens (6 decimals), making it DeFi-compatible. Locked to a single loan token denomination per wrapper
+4. **Credit-Adjusted Valuation** — `WikshiReceivableOracle` prices wREC using an on-chain DCF model: `value = repaidAmount + (outstanding × creditMultiplier × timeDiscount)`. A $10K receivable from a score-700 borrower at 85% time discount = $7,225 collateral value
+5. **DeFi Lending** — wREC is deposited as collateral in WikshiLend. Borrowers get liquidity against receivable value at credit-adjusted LTV ratios
+6. **Liquidation** — `WikshiLiquidationRouter` handles the unique problem of RWA liquidation: atomically liquidates the position, unwraps seized wREC back to the underlying NFT, and routes it to the liquidator — all in one transaction via Morpho-style flash liquidation callback
+
+### Security Design
+
+- **Cherry-pick prevention**: Liquidators can only unwrap the specific borrower's NFT, not any high-value receivable in the wrapper pool (`depositorOf[tokenId] == borrower`)
+- **Denomination enforcement**: Each wrapper locked to single loan token prevents decimal mismatch attacks
+- **Duplicate prevention**: `sourceLoanHash` ensures the same real-world loan cannot be tokenized twice
+- **Defaulted receivable rejection**: Wrapper refuses to accept defaulted receivables as wrapping input
+
+### RWA Contract Summary
+
+| Contract | Role | Lines |
+|----------|------|-------|
+| `WikshiReceivable` | ERC-721 loan tokenization + DCF valuation | 298 |
+| `WikshiReceivableWrapper` | NFT → fungible ERC-20 bridge | 251 |
+| `WikshiReceivableOracle` | Credit-adjusted price feed for Morpho markets | 136 |
+| `WikshiLiquidationRouter` | Atomic liquidation + NFT routing | 156 |
 
 ---
 
