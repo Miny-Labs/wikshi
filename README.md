@@ -16,13 +16,11 @@
 
 ## Overview
 
-Wikshi is the first credit-aware lending protocol built on Creditcoin. Unlike traditional DeFi lending where every borrower faces identical collateral requirements regardless of history, Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms.
+Wikshi is a singleton lending protocol where borrowing terms are a function of repayment history. Cross-chain payment proofs — verified through [USC](https://docs.creditcoin.org/) precompiles — feed an on-chain credit oracle that adjusts collateral requirements, interest rates, and liquidation thresholds per borrower. Good history means better terms. Liquidation means score slashing. Inactivity means decay. The system is self-correcting.
 
-A borrower with 10+ verified repayments across Ethereum, Polygon, or any USC-supported chain earns a higher trust tier and better collateral ratios. A borrower who gets liquidated sees their credit score slashed. Inactive scores decay over time. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
+The protocol also accepts tokenized real-world loan receivables as collateral. Receivables are minted as ERC-721 NFTs, wrapped into fungible ERC-20 tokens, and priced using an on-chain DCF model that factors in borrower creditworthiness. This creates a path from off-chain lending activity into DeFi-native capital markets.
 
-Wikshi also implements a full RWA receivables pipeline that tokenizes real-world loan receivables — from Gluwa's Loan.sol, Aella microfinance, and Creditcoin's 5M+ native loan transactions — into on-chain collateral. Receivables are minted as ERC-721 NFTs, wrapped into fungible ERC-20 tokens, priced via an on-chain credit-adjusted DCF model, and accepted as collateral in lending markets. This is the RWA-to-DeFi bridge that Creditcoin was built for.
-
-**Core thesis**: Credit data should have *consequences*, not just visibility. Real-world assets should be *usable*, not just recorded.
+Architecture follows the Morpho Blue pattern — one contract, infinite isolated markets, permissionless composition.
 
 ---
 
