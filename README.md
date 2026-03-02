@@ -6,9 +6,10 @@
 <p align="center">
   <img src="https://img.shields.io/badge/License-BUSL%201.1-blue.svg" alt="License: BUSL-1.1" />
   <img src="https://img.shields.io/badge/Solidity-0.8.26-363636.svg" alt="Solidity" />
-  <img src="https://img.shields.io/badge/Tests-336%20passing-brightgreen.svg" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-325%20passing-brightgreen.svg" alt="Tests" />
   <img src="https://img.shields.io/badge/On--Chain%20Tests-51%20passing-brightgreen.svg" alt="On-Chain Tests" />
   <img src="https://img.shields.io/badge/Deployed-Creditcoin%20Testnet-orange.svg" alt="Deployed" />
+  <img src="https://img.shields.io/badge/Contracts-Verified%20on%20Blockscout-green.svg" alt="Verified" />
 </p>
 
 ---
@@ -173,6 +174,8 @@ graph LR
 
 **Network**: Creditcoin USC Testnet v2 | **Chain ID**: `102036` | **RPC**: `https://rpc.usc-testnet2.creditcoin.network`
 
+All contracts are **source-verified** on [Blockscout](https://explorer.usc-testnet2.creditcoin.network). Click any explorer link to read the verified source code.
+
 | Contract | Address | Explorer |
 |----------|---------|----------|
 | **WikshiLend** | `0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73) |
@@ -202,7 +205,7 @@ graph LR
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/Miny-Labs/wikshi.git
 cd wikshi
 
 # Install dependencies
@@ -221,7 +224,7 @@ npx hardhat test
 
 | Suite | Command | Tests | Description |
 |-------|---------|-------|-------------|
-| Unit Tests | `npm test` | 336 | All contracts — lending, oracle, vault, SBT, IRM, receivables |
+| Unit Tests | `npm test` | 325 | All contracts — lending, oracle, vault, SBT, IRM, receivables |
 | On-Chain (Testnet) | `npm run test:onchain` | 51 | Full protocol flow on Creditcoin USC Testnet v2 |
 | Integration (USC) | `npm run test:integration` | 33 | Cross-chain proof verification with USC precompiles |
 
@@ -262,7 +265,9 @@ wikshi/
 
 ## Security
 
+- Comprehensive protocol audit completed — see [`docs/comprehensive-audit.md`](docs/comprehensive-audit.md)
 - Internal security audit completed — see [`docs/audit-report.md`](docs/audit-report.md)
+- All deployed contracts source-verified on Blockscout
 - Checks-Effects-Interactions pattern enforced throughout
 - `ReentrancyGuard` on all state-changing external functions
 - Fee-on-transfer token defense via balance-before/after checks

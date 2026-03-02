@@ -36,4 +36,19 @@ module.exports = {
     cache: "./cache",
     artifacts: "./artifacts",
   },
+  etherscan: {
+    apiKey: {
+      creditcoinTestnet: "no-api-key-needed",
+    },
+    customChains: [
+      {
+        network: "creditcoinTestnet",
+        chainId: 102036,
+        urls: {
+          apiURL: "https://blockscout.usc-testnet2.creditcoin.network/api",
+          browserURL: "https://explorer.usc-testnet2.creditcoin.network",
+        },
+      },
+    ],
+  },
 };
