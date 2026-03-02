@@ -16,9 +16,11 @@
 
 ## Overview
 
-Wikshi is a singleton lending protocol where borrowing terms are a function of repayment history. Cross-chain payment proofs — verified through [USC](https://docs.creditcoin.org/) precompiles — feed an on-chain credit oracle that adjusts collateral requirements, interest rates, and liquidation thresholds per borrower. Good history means better terms. Liquidation means score slashing. Inactivity means decay. The system is self-correcting.
+Wikshi is the first lending protocol on Creditcoin that makes credit history matter. Creditcoin has recorded 5M+ real-world loan transactions and $80M+ in credit volume across emerging markets through its partnerships with Aella and microfinance institutions — but until now, none of that data has been usable inside DeFi. Wikshi changes that.
 
-The protocol also accepts tokenized real-world loan receivables as collateral. Receivables are minted as ERC-721 NFTs, wrapped into fungible ERC-20 tokens, and priced using an on-chain DCF model that factors in borrower creditworthiness. This creates a path from off-chain lending activity into DeFi-native capital markets.
+The protocol uses Creditcoin's [Universal Smart Contract (USC)](https://docs.creditcoin.org/) precompiles to verify cross-chain payment proofs from any EVM chain. These proofs feed an on-chain credit oracle that adjusts collateral requirements, interest rates, and liquidation thresholds per borrower. A borrower with verified repayment history across Ethereum, Polygon, or Creditcoin's native loan cycles gets better terms. Liquidation triggers credit slashing. Inactivity triggers decay. The system is self-correcting.
+
+Wikshi also tokenizes real-world loan receivables — from Gluwa's Loan.sol, Aella microfinance portfolios, and Creditcoin's native Credal-powered loan cycles — into on-chain collateral. Receivables are minted as ERC-721 NFTs, wrapped into fungible ERC-20 tokens, priced using a credit-adjusted DCF model, and accepted as collateral in lending markets. This is the RWA-to-DeFi bridge that turns Creditcoin's existing real-world credit infrastructure into composable capital.
 
 Architecture follows the Morpho Blue pattern — one contract, infinite isolated markets, permissionless composition.
 
@@ -30,7 +32,7 @@ Architecture follows the Morpho Blue pattern — one contract, infinite isolated
 sequenceDiagram
     participant B as Borrower
     participant SC as Source Chain (ETH, Polygon, etc.)
-    participant USC as USC Precompile (0x0FD2)
+    participant USC as Creditcoin USC Precompile (0x0FD2)
     participant CO as WikshiCreditOracle
     participant WL as WikshiLend
 
@@ -71,7 +73,7 @@ graph TB
         RO[WikshiReceivableOracle<br/>RWA Pricing]
     end
 
-    subgraph Vendor["USC Infrastructure"]
+    subgraph Vendor["Creditcoin USC Infrastructure"]
         UB[USCBase<br/>Proof Verification]
         ED[EvmV1Decoder<br/>TX Decoder]
         CI[ChainInfoPrecompile<br/>0x0FD3]
@@ -101,18 +103,21 @@ graph TB
 |---------|-------------|
 | **Morpho Blue Architecture** | Singleton lending with isolated markets — one contract, infinite markets |
 | **Credit-Adjusted LLTV** | Trust tier gates LLTV bonus (Unverified borrowers get no advantage) |
-| **USC Cross-Chain Verification** | Read payment history from any EVM chain via native precompile proofs |
+| **USC Cross-Chain Verification** | Read payment history from any EVM chain via Creditcoin's USC precompiles (`0x0FD2`, `0x0FD3`) |
+| **Creditcoin Native Event Ingestion** | Directly processes Creditcoin L1 loan events (`LoanFundInitiated`, `LoanRepaid`, `LoanExpired`) |
+| **Gluwa Loan.sol Integration** | Decodes and scores events from Gluwa's CCNext Loan.sol contract on any USC-supported chain |
+| **Credal-Compatible Operator** | Pluggable off-chain scoring via operator role — compatible with Creditcoin's Credal API infrastructure |
 | **Score Decay** | 1 point/day after 30-day grace period — VIEW-only computation, zero gas |
-| **Credit Slashing** | Liquidation triggers -100 score penalty (inspired by 3Jane's credit slasher) |
+| **Credit Slashing** | Liquidation triggers -100 score penalty |
 | **Progressive Trust Tiers** | Unverified → Basic → Established → Trusted |
 | **ERC-4626 Vault** | Passive lending with 6-decimal offset for inflation attack protection |
-| **Soulbound Credit Identity** | ERC-5192 non-transferable credit NFT — composable with any on-chain protocol |
+| **Soulbound Credit Identity** | ERC-5192 non-transferable credit NFT — composable across the Creditcoin ecosystem |
+| **RWA Receivables** | Tokenized real-world loan receivables as on-chain collateral with credit-adjusted DCF valuation |
 | **EIP-712 Authorization** | Gasless operations, bundler-compatible signature authorization |
 | **Supply/Borrow Caps** | Per-market risk limits, owner-configurable |
 | **Pause Mechanism** | Emergency inflow stop — withdrawals, repayments, and liquidations always work |
 | **Flash Loans** | Atomic borrow + repay for liquidation bots and arbitrageurs |
 | **Credit-Aware IRM** | Kink-based interest rates with up to 20% discount for high-score borrowers |
-| **RWA Receivables** | Tokenized invoices as on-chain collateral with DCF valuation |
 | **Fee-on-Transfer Defense** | Balance-checked transfers protect against deflationary tokens |
 | **Multicall** | Typed batch operations (supplyCollateral + borrow in 1 tx) |
 
@@ -120,12 +125,14 @@ graph TB
 
 ## Credit System
 
+The credit oracle ingests payment events from three sources that span the Creditcoin ecosystem:
+
 ```mermaid
 graph LR
     subgraph Sources["Credit Sources"]
-        OP[Operator<br/>Off-Chain Credal]
-        USC_P[USC Proof<br/>Cross-Chain Payment]
-        NAT[Native<br/>Creditcoin L1 Events]
+        OP[Credal Operator<br/>Off-Chain API]
+        USC_P[USC Cross-Chain<br/>Any EVM via 0x0FD2]
+        NAT[Creditcoin Native<br/>L1 Loan Events]
     end
 
     subgraph Oracle["WikshiCreditOracle"]
@@ -164,21 +171,21 @@ graph LR
 | Credit Rate Discount | Up to 20% off pool rate (score 1000) |
 
 **Credit Event Sources**:
-- **USC Cross-Chain**: `PaymentMade`, Gluwa `Loan.sol` events (`LoanRepaid`, `LoanExpired`, `LoanLateRepayment`)
-- **Creditcoin Native**: `LoanFundInitiated`, `LoanRepaid`, `LoanLateRepayment`, `LoanExpired`
-- **Off-Chain**: Credal operator (pluggable scoring model)
+- **USC Cross-Chain**: `PaymentMade`, Gluwa `Loan.sol` events (`LoanRepaid`, `LoanExpired`, `LoanLateRepayment`) — verified via Creditcoin's USC precompile at `0x0FD2` with Merkle + continuity proofs
+- **Creditcoin Native**: `LoanFundInitiated`, `LoanRepaid`, `LoanLateRepayment`, `LoanExpired` — from Creditcoin's 5M+ on-chain loan transaction history
+- **Off-Chain**: Credal operator — pluggable scoring model compatible with Creditcoin's Credal API, which powers real-world lending for partners like Aella (2M+ borrowers)
 
 ---
 
 ## Real-World Assets (RWA) as Collateral
 
-The protocol implements a full RWA receivables pipeline (~950 lines across 4 contracts) that converts real-world loan receivables into on-chain collateral for DeFi lending markets.
+Creditcoin connects DeFi to traditional asset classes — bonds, receivables, microfinance portfolios — across emerging markets. Wikshi implements a full RWA receivables pipeline (~950 lines across 4 contracts) that takes this from vision to working infrastructure: real-world loans originated through Gluwa's Loan.sol and Creditcoin's native Credal-powered loan cycles become usable DeFi collateral.
 
 ```mermaid
 graph LR
-    subgraph External["Real-World Loan"]
+    subgraph External["Real-World Loan Sources"]
         GL[Gluwa Loan.sol<br/>Aella / Microfinance]
-        CL[Creditcoin L1<br/>Substrate Loan Cycles]
+        CL[Creditcoin L1<br/>Credal Loan Cycles]
     end
 
     subgraph Tokenize["Tokenization"]
@@ -212,12 +219,12 @@ graph LR
 
 ### How It Works
 
-1. **Loan Origination** — A real-world loan is funded via Gluwa's Loan.sol or native Creditcoin loan cycles
+1. **Loan Origination** — A real-world loan is funded through Gluwa's Loan.sol (Aella microfinance, emerging market lenders) or Creditcoin's native Credal-powered loan cycles (5M+ transactions, $80M+ volume)
 2. **NFT Tokenization** — `WikshiReceivable` mints an ERC-721 NFT representing the lender's right to repayment. Each NFT embeds principal, interest rate, maturity, borrower, and cross-chain source metadata (`sourceChainKey` + `sourceLoanHash` for deduplication)
 3. **ERC-20 Wrapping** — `WikshiReceivableWrapper` converts the illiquid NFT into fungible `wREC` ERC-20 tokens (6 decimals), making it DeFi-compatible. Locked to a single loan token denomination per wrapper
 4. **Credit-Adjusted Valuation** — `WikshiReceivableOracle` prices wREC using an on-chain DCF model: `value = repaidAmount + (outstanding × creditMultiplier × timeDiscount)`. A $10K receivable from a score-700 borrower at 85% time discount = $7,225 collateral value
 5. **DeFi Lending** — wREC is deposited as collateral in WikshiLend. Borrowers get liquidity against receivable value at credit-adjusted LTV ratios
-6. **Liquidation** — `WikshiLiquidationRouter` handles the unique problem of RWA liquidation: atomically liquidates the position, unwraps seized wREC back to the underlying NFT, and routes it to the liquidator — all in one transaction via Morpho-style flash liquidation callback
+6. **Liquidation** — `WikshiLiquidationRouter` atomically liquidates the position, unwraps seized wREC back to the underlying NFT, and routes it to the liquidator — all in one transaction via Morpho-style flash liquidation callback
 
 ### Security Design
 
@@ -268,6 +275,25 @@ All contracts are **source-verified** on [Blockscout](https://explorer.usc-testn
 
 ---
 
+## Creditcoin Integration Depth
+
+Wikshi is not a generic lending fork deployed on Creditcoin — it is built specifically around Creditcoin's infrastructure:
+
+| Creditcoin Feature | How Wikshi Uses It |
+|--------------------|-------------------|
+| **USC Precompile (`0x0FD2`)** | Cross-chain payment proof verification — read loan events from Ethereum, Polygon, any EVM |
+| **ChainInfo Precompile (`0x0FD3`)** | Attestation readiness checks before proof submission |
+| **EvmV1Decoder** | Decode raw transaction receipts and extract event logs from USC proofs |
+| **Gluwa Loan.sol Events** | Native event selectors registered: `LoanFundInitiated`, `LoanRepaid`, `LoanLateRepayment`, `LoanExpired` |
+| **Credal API** | Operator role mirrors Credal's off-chain scoring model — pluggable for any lender's risk framework |
+| **Creditcoin L1 Credit History** | 5M+ loan transactions become inputs to on-chain credit scores via USC proofs |
+| **Per-Chain Source Allowlist** | Chain-scoped contract allowlisting prevents cross-chain address collision attacks |
+| **RWA Receivables** | Tokenizes loan receivables from Gluwa/Aella microfinance into DeFi-native collateral |
+
+Vendor contracts (`USCBase.sol`, `EvmV1Decoder.sol`, `VerifierInterface.sol`, `ChainInfoPrecompile.sol`) are vendored directly from [`gluwa/usc-testnet-bridge-examples`](https://github.com/gluwa/usc-testnet-bridge-examples) — SHA256-verified identical to upstream.
+
+---
+
 ## Getting Started
 
 ```bash
@@ -293,7 +319,7 @@ npx hardhat test
 |-------|---------|-------|-------------|
 | Unit Tests | `npm test` | 325 | All contracts — lending, oracle, vault, SBT, IRM, receivables |
 | On-Chain (Testnet) | `npm run test:onchain` | 51 | Full protocol flow on Creditcoin USC Testnet v2 |
-| Integration (USC) | `npm run test:integration` | 33 | Cross-chain proof verification with USC precompiles |
+| Integration (USC) | `npm run test:integration` | 33 | Cross-chain USC proof verification with Creditcoin precompiles |
 
 ---
 
@@ -318,12 +344,12 @@ wikshi/
 │   ├── interfaces/      # Solidity interfaces for all contracts
 │   ├── libraries/       # Math, shares, utils, market params
 │   ├── periphery/       # IRM, oracle, multicall, liquidation router, payment tracker
-│   ├── vendor/          # USC precompile wrappers (Creditcoin infrastructure)
+│   ├── vendor/          # Creditcoin USC precompile wrappers (from gluwa/usc-testnet-bridge-examples)
 │   └── mocks/           # Test-only mock contracts
 ├── test/                # Unit test suite (Hardhat + Chai)
 ├── scripts/             # Deployment and integration test scripts
 ├── deployments/         # Deployment records with contract addresses
-├── docs/                # Audit report and documentation
+├── docs/                # Audit reports and documentation
 ├── hardhat.config.js    # Build configuration
 └── package.json         # Dependencies and scripts
 ```
@@ -338,8 +364,9 @@ wikshi/
 - Checks-Effects-Interactions pattern enforced throughout
 - `ReentrancyGuard` on all state-changing external functions
 - Fee-on-transfer token defense via balance-before/after checks
-- Per-chain source contract allowlisting (prevents CREATE2 address collision attacks)
+- Per-chain source contract allowlisting (prevents CREATE2 address collision attacks on USC proofs)
 - Pause mechanism protects against inflow during emergencies — outflows always work
+- USC vendor contracts SHA256-verified against upstream [`gluwa/usc-testnet-bridge-examples`](https://github.com/gluwa/usc-testnet-bridge-examples)
 - See [`SECURITY.md`](SECURITY.md) for responsible disclosure policy
 
 ---
