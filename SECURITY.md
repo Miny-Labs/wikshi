@@ -12,7 +12,7 @@ All contracts in `contracts/core/` and `contracts/periphery/` are in scope for s
 
 If you discover a vulnerability, please report it responsibly:
 
-**Email**: security@wikshi.xyz
+**Email**: thatspacebiker@gmail.com
 
 Please include:
 - Description of the vulnerability
