@@ -1,0 +1,284 @@
+<p align="center">
+  <h1 align="center">Wikshi Protocol</h1>
+  <p align="center"><strong>Credit-native lending on Creditcoin — where your repayment history unlocks better terms.</strong></p>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/License-BUSL%201.1-blue.svg" alt="License: BUSL-1.1" />
+  <img src="https://img.shields.io/badge/Solidity-0.8.26-363636.svg" alt="Solidity" />
+  <img src="https://img.shields.io/badge/Tests-336%20passing-brightgreen.svg" alt="Tests" />
+  <img src="https://img.shields.io/badge/On--Chain%20Tests-51%20passing-brightgreen.svg" alt="On-Chain Tests" />
+  <img src="https://img.shields.io/badge/Deployed-Creditcoin%20Testnet-orange.svg" alt="Deployed" />
+</p>
+
+---
+
+## Overview
+
+Wikshi is the first credit-aware lending protocol built on Creditcoin. Unlike traditional DeFi lending where every borrower faces identical collateral requirements regardless of history, Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms.
+
+**Core thesis**: Credit data should have *consequences*, not just visibility.
+
+A borrower with 10+ verified repayments across Ethereum, Polygon, or any USC-supported chain earns a higher trust tier and better collateral ratios. A borrower who gets liquidated sees their credit score slashed. Inactive scores decay over time. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
+
+---
+
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant B as Borrower
+    participant SC as Source Chain (ETH, Polygon, etc.)
+    participant USC as USC Precompile (0x0FD2)
+    participant CO as WikshiCreditOracle
+    participant WL as WikshiLend
+
+    B->>SC: Makes loan repayment
+    SC-->>USC: Merkle + continuity proof
+    B->>CO: Submit USC proof of payment
+    CO->>USC: verify(chainKey, blockHeight, tx, proof)
+    USC-->>CO: Verified ✓
+    CO->>CO: Decode event → update score + tier
+    B->>WL: Request borrow
+    WL->>CO: getCreditScore(borrower)
+    CO-->>WL: Score 750, Tier: Established
+    WL->>WL: effectiveLLTV = 80% + 7.5% bonus = 87.5%
+    WL-->>B: Borrow approved at reduced collateral
+```
+
+---
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Core["Core Protocol"]
+        WL[WikshiLend<br/>Singleton Lending]
+        CO[WikshiCreditOracle<br/>Dual-Source Scoring]
+        WV[WikshiVault<br/>ERC-4626 Vault]
+        WR[WikshiReceivable<br/>RWA Collateral]
+        SBT[WikshiCreditSBT<br/>Soulbound Identity]
+    end
+
+    subgraph Periphery["Periphery"]
+        IRM[WikshiIrm<br/>Kink-Based IRM]
+        OR[WikshiOracle<br/>Price Feed]
+        MC[WikshiMulticall<br/>Batch Ops]
+        LR[WikshiLiquidationRouter<br/>Receivable Unwrap]
+        PT[PaymentTracker<br/>Source Chain Events]
+        RW[WikshiReceivableWrapper<br/>ERC-721 → ERC-20]
+        RO[WikshiReceivableOracle<br/>RWA Pricing]
+    end
+
+    subgraph Vendor["USC Infrastructure"]
+        UB[USCBase<br/>Proof Verification]
+        ED[EvmV1Decoder<br/>TX Decoder]
+        CI[ChainInfoPrecompile<br/>0x0FD3]
+        VI[VerifierInterface<br/>0x0FD2]
+    end
+
+    WL --> CO
+    WL --> IRM
+    WL --> OR
+    WV --> WL
+    CO --> UB
+    CO --> ED
+    CO --> CI
+    UB --> VI
+    SBT --> CO
+    MC --> WL
+    LR --> WL
+    LR --> WR
+    PT -.->|USC Proof| CO
+```
+
+---
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **Morpho Blue Architecture** | Singleton lending with isolated markets — one contract, infinite markets |
+| **Credit-Adjusted LLTV** | Trust tier gates LLTV bonus (Unverified borrowers get no advantage) |
+| **USC Cross-Chain Verification** | Read payment history from any EVM chain via Creditcoin's precompiles |
+| **Score Decay** | 1 point/day after 30-day grace period — VIEW-only computation, zero gas |
+| **Credit Slashing** | Liquidation triggers -100 score penalty (inspired by 3Jane's credit slasher) |
+| **Progressive Trust Tiers** | Unverified → Basic → Established → Trusted |
+| **ERC-4626 Vault** | Passive lending with 6-decimal offset for inflation attack protection |
+| **Soulbound Credit Identity** | ERC-5192 non-transferable credit NFT — composable across Creditcoin |
+| **EIP-712 Authorization** | Gasless operations, bundler-compatible signature authorization |
+| **Supply/Borrow Caps** | Per-market risk limits, owner-configurable |
+| **Pause Mechanism** | Emergency inflow stop — withdrawals, repayments, and liquidations always work |
+| **Flash Loans** | Atomic borrow + repay for liquidation bots and arbitrageurs |
+| **Credit-Aware IRM** | Kink-based interest rates with up to 20% discount for high-score borrowers |
+| **RWA Receivables** | Tokenized invoices as on-chain collateral with DCF valuation |
+| **Fee-on-Transfer Defense** | Balance-checked transfers protect against deflationary tokens |
+| **Multicall** | Typed batch operations (supplyCollateral + borrow in 1 tx) |
+
+---
+
+## Credit System
+
+```mermaid
+graph LR
+    subgraph Sources["Credit Sources"]
+        OP[Operator<br/>Off-Chain Credal]
+        USC_P[USC Proof<br/>Cross-Chain Payment]
+        NAT[Native<br/>Creditcoin L1 Events]
+    end
+
+    subgraph Oracle["WikshiCreditOracle"]
+        SC[Score<br/>0 — 1000]
+        TT[Trust Tier]
+        DC[Decay<br/>1 pt/day after 30d]
+        SL[Slash<br/>-100 on liquidation]
+    end
+
+    subgraph Tiers["Progressive Trust"]
+        T0[Unverified<br/>0 payments]
+        T1[Basic<br/>1+ payments]
+        T2[Established<br/>5+ payments, score ≥ 400]
+        T3[Trusted<br/>10+ payments, score ≥ 700]
+    end
+
+    OP --> SC
+    USC_P --> SC
+    NAT --> SC
+    SC --> TT
+    SC --> DC
+    SC --> SL
+
+    TT --> T0
+    TT --> T1
+    TT --> T2
+    TT --> T3
+```
+
+| Parameter | Value |
+|-----------|-------|
+| Score Range | 0 — 1000 (initial: 300) |
+| LLTV Bonus | Up to +10% (requires Established tier or above) |
+| Decay | 1 point/day after 30-day grace period |
+| Slash Penalty | -100 points per liquidation |
+| Credit Rate Discount | Up to 20% off pool rate (score 1000) |
+
+**Credit Event Sources**:
+- **USC Cross-Chain**: `PaymentMade`, Gluwa `Loan.sol` events (`LoanRepaid`, `LoanExpired`, `LoanLateRepayment`)
+- **Creditcoin Native**: `LoanFundInitiated`, `LoanRepaid`, `LoanLateRepayment`, `LoanExpired`
+- **Off-Chain**: Credal operator (pluggable scoring model)
+
+---
+
+## Deployed Contracts
+
+**Network**: Creditcoin USC Testnet v2 | **Chain ID**: `102036` | **RPC**: `https://rpc.usc-testnet2.creditcoin.network`
+
+| Contract | Address | Explorer |
+|----------|---------|----------|
+| **WikshiLend** | `0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73) |
+| **WikshiCreditOracle** | `0x7002a4528B957Aa16F1a3187031b35DA08E81ECa` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x7002a4528B957Aa16F1a3187031b35DA08E81ECa) |
+| **WikshiVault** | `0x84A7992798ac855185742E014E0488831FbEBce2` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x84A7992798ac855185742E014E0488831FbEBce2) |
+| **WikshiCreditSBT** | `0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1) |
+| **WikshiIrm** | `0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa) |
+| **WikshiOracle** | `0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6) |
+| **WikshiMulticall** | `0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005) |
+| **EvmV1Decoder** | `0xc742BCFF7CcCea0dF52369591BD8473A840866f8` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xc742BCFF7CcCea0dF52369591BD8473A840866f8) |
+| **TestToken (WCTC)** | `0x9A1F674108286906cDB25CfbF7Bd538131492435` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x9A1F674108286906cDB25CfbF7Bd538131492435) |
+| **USD-TCoin** | `0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8) |
+
+### Market: WCTC / USD-TCoin
+
+| Parameter | Value |
+|-----------|-------|
+| Base LLTV | 80% (125% collateral ratio) |
+| Max Credit LLTV | 90% (111% collateral ratio) |
+| IRM | ~2% base, ~4% slope1, ~75% slope2, 80% kink |
+| Protocol Fee | 5% |
+| Credit Rate Discount | Up to 20% off pool rate (score 1000) |
+
+---
+
+## Getting Started
+
+```bash
+# Clone the repository
+git clone <repo-url>
+cd wikshi
+
+# Install dependencies
+npm install
+
+# Compile contracts
+npx hardhat compile
+
+# Run unit tests
+npx hardhat test
+```
+
+---
+
+## Testing
+
+| Suite | Command | Tests | Description |
+|-------|---------|-------|-------------|
+| Unit Tests | `npm test` | 336 | All contracts — lending, oracle, vault, SBT, IRM, receivables |
+| On-Chain (Testnet) | `npm run test:onchain` | 51 | Full protocol flow on Creditcoin USC Testnet v2 |
+| Integration (USC) | `npm run test:integration` | 33 | Cross-chain proof verification with USC precompiles |
+
+---
+
+## Deployment
+
+```bash
+# Copy env template and add your deployer private key
+cp .env.example .env
+
+# Deploy to Creditcoin testnet
+npm run deploy:testnet
+```
+
+---
+
+## Project Structure
+
+```
+wikshi/
+├── contracts/           # Solidity smart contracts
+│   ├── core/            # Protocol core — lending, oracle, vault, receivables, SBT
+│   ├── interfaces/      # Solidity interfaces for all contracts
+│   ├── libraries/       # Math, shares, utils, market params
+│   ├── periphery/       # IRM, oracle, multicall, liquidation router, payment tracker
+│   ├── vendor/          # USC precompile wrappers (Creditcoin infrastructure)
+│   └── mocks/           # Test-only mock contracts
+├── test/                # Unit test suite (Hardhat + Chai)
+├── scripts/             # Deployment and integration test scripts
+├── deployments/         # Deployment records with contract addresses
+├── docs/                # Audit report and documentation
+├── hardhat.config.js    # Build configuration
+└── package.json         # Dependencies and scripts
+```
+
+---
+
+## Security
+
+- Internal security audit completed — see [`docs/audit-report.md`](docs/audit-report.md)
+- Checks-Effects-Interactions pattern enforced throughout
+- `ReentrancyGuard` on all state-changing external functions
+- Fee-on-transfer token defense via balance-before/after checks
+- Per-chain source contract allowlisting (prevents CREATE2 address collision attacks)
+- Pause mechanism protects against inflow during emergencies — outflows always work
+- See [`SECURITY.md`](SECURITY.md) for responsible disclosure policy
+
+---
+
+## License
+
+Licensed under the [Business Source License 1.1](LICENSE).
+
+---
+
+<p align="center">
+  <strong>Built for <a href="https://dorahacks.io/hackathon/buidl-ctc">BUIDL CTC Hackathon 2026</a></strong><br/>
+  Creditcoin USC Testnet v2 | Chain ID 102036
+</p>

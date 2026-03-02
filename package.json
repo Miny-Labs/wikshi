@@ -1,0 +1,37 @@
+{
+  "name": "@wikshi/protocol",
+  "version": "1.0.0",
+  "description": "Credit-native lending protocol on Creditcoin with USC cross-chain verification",
+  "author": "Wikshi Team",
+  "license": "BUSL-1.1",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network creditcoinTestnet",
+    "test:onchain": "hardhat run scripts/onchain-test.js --network creditcoinTestnet",
+    "test:integration": "hardhat run scripts/integration-test.js --network creditcoinTestnet",
+    "clean": "hardhat clean"
+  },
+  "keywords": [
+    "creditcoin",
+    "defi",
+    "lending",
+    "credit-scoring",
+    "usc",
+    "solidity"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.2",
+    "@openzeppelin/contracts": "^5.6.1",
+    "hardhat": "^2.28.6"
+  },
+  "dependencies": {
+    "@gluwa/cc-next-query-builder": "^0.7.0",
+    "dotenv": "^17.3.1",
+    "ethers": "^6.16.0"
+  }
+}

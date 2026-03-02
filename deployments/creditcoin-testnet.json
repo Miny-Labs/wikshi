@@ -1,0 +1,25 @@
+{
+  "network": "creditcoin-usc-testnet-v2",
+  "chainId": 102036,
+  "deployer": "0x761Ef96c559932Ba9443A25CA59a4F33Dd6Fb27c",
+  "timestamp": "2026-03-02T15:25:46.152Z",
+  "contracts": {
+    "EvmV1Decoder": "0xc742BCFF7CcCea0dF52369591BD8473A840866f8",
+    "WikshiCreditOracle": "0x7002a4528B957Aa16F1a3187031b35DA08E81ECa",
+    "WikshiLend": "0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73",
+    "WikshiIrm": "0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa",
+    "WikshiOracle": "0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6",
+    "WikshiVault": "0x84A7992798ac855185742E014E0488831FbEBce2",
+    "WikshiCreditSBT": "0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1",
+    "WikshiMulticall": "0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005",
+    "TestTokenWCTC": "0x9A1F674108286906cDB25CfbF7Bd538131492435",
+    "USDTCoin": "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8"
+  },
+  "marketParams": {
+    "loanToken": "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8",
+    "collateralToken": "0x9A1F674108286906cDB25CfbF7Bd538131492435",
+    "oracle": "0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6",
+    "irm": "0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa",
+    "lltv": "0.8e18"
+  }
+}
