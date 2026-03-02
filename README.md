@@ -16,11 +16,11 @@
 
 ## Overview
 
-Wikshi is the first credit-aware lending protocol built on Creditcoin. It combines two pillars that directly serve Creditcoin's mission of bridging DeFi and TradFi for the world's 1.4B unbanked:
+Wikshi is the first credit-aware lending protocol built on Creditcoin. Unlike traditional DeFi lending where every borrower faces identical collateral requirements regardless of history, Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms.
 
-**1. Credit-Native Lending** — Wikshi reads verified payment data from any EVM chain via Creditcoin's [Universal Settlement Chain (USC)](https://docs.creditcoin.org/) and translates it into on-chain credit scores that dynamically adjust borrowing terms. A borrower with 10+ verified repayments earns a higher trust tier and better collateral ratios. Liquidation triggers credit slashing. Inactive scores decay. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
+A borrower with 10+ verified repayments across Ethereum, Polygon, or any USC-supported chain earns a higher trust tier and better collateral ratios. A borrower who gets liquidated sees their credit score slashed. Inactive scores decay over time. This creates a self-reinforcing credit loop — the first of its kind in DeFi.
 
-**2. Real-World Asset Collateral** — Wikshi tokenizes real-world loan receivables (from Gluwa's Loan.sol, Aella microfinance, and Creditcoin's 5M+ native loan transactions) into ERC-721 NFTs, wraps them into fungible ERC-20 tokens, prices them using an on-chain credit-adjusted DCF model, and accepts them as collateral in lending markets. This is the RWA-to-DeFi pipeline that Creditcoin was built for.
+Wikshi also implements a full RWA receivables pipeline that tokenizes real-world loan receivables — from Gluwa's Loan.sol, Aella microfinance, and Creditcoin's 5M+ native loan transactions — into on-chain collateral. Receivables are minted as ERC-721 NFTs, wrapped into fungible ERC-20 tokens, priced via an on-chain credit-adjusted DCF model, and accepted as collateral in lending markets. This is the RWA-to-DeFi bridge that Creditcoin was built for.
 
 **Core thesis**: Credit data should have *consequences*, not just visibility. Real-world assets should be *usable*, not just recorded.
 
