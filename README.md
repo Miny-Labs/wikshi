@@ -12,6 +12,10 @@
   <img src="https://img.shields.io/badge/Contracts-Verified%20on%20Blockscout-green.svg" alt="Verified" />
 </p>
 
+<p align="center">
+  <a href="docs/wikshi-whitepaper.pdf"><strong>Read the Whitepaper</strong></a>
+</p>
+
 ---
 
 ## Overview
