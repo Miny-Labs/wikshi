@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-whitepaper.pdf"><strong>Read the Whitepaper</strong></a>
+  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-whitepaper.pdf&embedded=false"><strong>Read the Whitepaper</strong></a>
 </p>
 
 ---
