@@ -14,6 +14,10 @@
 
 <p align="center">
   <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-whitepaper.pdf&embedded=false"><strong>Read the Whitepaper</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-pitch-deck-en.pdf&embedded=false"><strong>Pitch Deck (EN)</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-pitch-deck-kr.pdf&embedded=false"><strong>피치덱 (한국어)</strong></a>
 </p>
 
 ---
