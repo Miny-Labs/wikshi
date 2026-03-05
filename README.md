@@ -13,11 +13,11 @@
 </p>
 
 <p align="center">
-  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-whitepaper.pdf&embedded=false"><strong>Read the Whitepaper</strong></a>
+  <a href="https://drive.google.com/file/d/1IqtJ-E4RCDSaa711c8sYqI2qJ_5jA3RU/view?usp=sharing"><strong>Read the Whitepaper</strong></a>
   &nbsp;·&nbsp;
-  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-pitch-deck-en.pdf&embedded=false"><strong>Pitch Deck (EN)</strong></a>
+  <a href="https://drive.google.com/file/d/1BLQNU-XVLX7kMZvyo_RNl05G_nIBi1KQ/view?usp=sharing"><strong>Pitch Deck (EN)</strong></a>
   &nbsp;·&nbsp;
-  <a href="https://docs.google.com/gview?url=https://github.com/Miny-Labs/wikshi/raw/main/docs/wikshi-pitch-deck-kr.pdf&embedded=false"><strong>피치덱 (한국어)</strong></a>
+  <a href="https://drive.google.com/file/d/1khTNBRUSNDulKh-P84vwK-_uEZOlgFh6/view?usp=sharing"><strong>피치덱 (한국어)</strong></a>
 </p>
 
 ---
