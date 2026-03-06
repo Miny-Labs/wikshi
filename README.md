@@ -1,7 +1,7 @@
 <p align="center">
-  <h1 align="center">Wikshi Protocol</h1>
-  <p align="center"><strong>Credit-native lending on Creditcoin — where your repayment history unlocks better terms.</strong></p>
+  <img src="docs/wikshi-logo.svg" alt="Wikshi Protocol" width="320" />
 </p>
+<p align="center"><strong>Credit-native lending on Creditcoin — where your repayment history unlocks better terms.</strong></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/License-BUSL%201.1-blue.svg" alt="License: BUSL-1.1" />
