@@ -13,16 +13,16 @@
     "WikshiCreditSBT": "0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1",
     "WikshiMulticall": "0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005",
     "TestTokenWCTC": "0x9A1F674108286906cDB25CfbF7Bd538131492435",
-    "USDTCoin": "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8",
-    "USDT": "0x04D24009A7E3784ba042E932B09201f86cBa16ee",
+    "USDT": "0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F",
     "WikshiReceivable": "0x009BA23B690152c22F3c80d790CAF3673F223a18",
     "WikshiReceivableWrapper": "0x7989045AC4c05D6002600CEa6107db5049f3506b",
     "WikshiReceivableOracle": "0x24F574B945F8D74358098F9919f8d64eF247FBaD",
     "WikshiLiquidationRouter": "0x9D9ab114B3D336319d08dB235c501Ac23C72dcFF",
-    "PaymentTracker": "0x1A978Ce96f3c52E8cd7e6bdCB66ECc4BcF7f96a7"
+    "PaymentTracker": "0x1A978Ce96f3c52E8cd7e6bdCB66ECc4BcF7f96a7",
+    "USDTCoin_OLD": "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8"
   },
   "marketParams": {
-    "loanToken": "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8",
+    "loanToken": "0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F",
     "collateralToken": "0x9A1F674108286906cDB25CfbF7Bd538131492435",
     "oracle": "0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6",
     "irm": "0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa",
@@ -35,5 +35,6 @@
     "irm": "0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa",
     "lltv": "0.7e18"
   },
-  "rwaDeployTimestamp": "2026-03-06T10:34:31.632Z"
+  "rwaDeployTimestamp": "2026-03-06T10:34:31.632Z",
+  "fixTimestamp": "2026-03-06T14:40:46.186Z"
 }

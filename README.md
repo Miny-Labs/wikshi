@@ -271,13 +271,13 @@ All contracts are **source-verified** on [Blockscout](https://explorer.usc-testn
 | **WikshiMulticall** | `0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005) |
 | **EvmV1Decoder** | `0xc742BCFF7CcCea0dF52369591BD8473A840866f8` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xc742BCFF7CcCea0dF52369591BD8473A840866f8) |
 | **TestToken (WCTC)** | `0x9A1F674108286906cDB25CfbF7Bd538131492435` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x9A1F674108286906cDB25CfbF7Bd538131492435) |
-| **USD-TCoin** | `0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8) |
+| **USDT (TestToken)** | `0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F) |
 
 **RWA Receivables Pipeline:**
 
 | Contract | Address | Explorer |
 |----------|---------|----------|
-| **USDT (TestToken)** | `0x04D24009A7E3784ba042E932B09201f86cBa16ee` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x04D24009A7E3784ba042E932B09201f86cBa16ee) |
+| **USDT-RWA (TestToken)** | `0x04D24009A7E3784ba042E932B09201f86cBa16ee` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x04D24009A7E3784ba042E932B09201f86cBa16ee) |
 | **WikshiReceivable** | `0x009BA23B690152c22F3c80d790CAF3673F223a18` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x009BA23B690152c22F3c80d790CAF3673F223a18) |
 | **WikshiReceivableWrapper** | `0x7989045AC4c05D6002600CEa6107db5049f3506b` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x7989045AC4c05D6002600CEa6107db5049f3506b) |
 | **WikshiReceivableOracle** | `0x24F574B945F8D74358098F9919f8d64eF247FBaD` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x24F574B945F8D74358098F9919f8d64eF247FBaD) |
