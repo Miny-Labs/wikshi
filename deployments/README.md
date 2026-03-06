@@ -11,6 +11,8 @@ Deployment records for the Wikshi Protocol.
 
 ### Deployed Contracts
 
+**Core Protocol + Infrastructure (deployed March 2, 2026):**
+
 | Contract | Address | Explorer |
 |----------|---------|----------|
 | WikshiLend | `0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73) |
@@ -24,7 +26,18 @@ Deployment records for the Wikshi Protocol.
 | TestToken (WCTC) | `0x9A1F674108286906cDB25CfbF7Bd538131492435` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x9A1F674108286906cDB25CfbF7Bd538131492435) |
 | USD-TCoin | `0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8) |
 
-### Market: WCTC / USD-TCoin
+**RWA Receivables Pipeline (deployed March 6, 2026):**
+
+| Contract | Address | Explorer |
+|----------|---------|----------|
+| USDT (TestToken) | `0x04D24009A7E3784ba042E932B09201f86cBa16ee` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x04D24009A7E3784ba042E932B09201f86cBa16ee) |
+| WikshiReceivable | `0x009BA23B690152c22F3c80d790CAF3673F223a18` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x009BA23B690152c22F3c80d790CAF3673F223a18) |
+| WikshiReceivableWrapper | `0x7989045AC4c05D6002600CEa6107db5049f3506b` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x7989045AC4c05D6002600CEa6107db5049f3506b) |
+| WikshiReceivableOracle | `0x24F574B945F8D74358098F9919f8d64eF247FBaD` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x24F574B945F8D74358098F9919f8d64eF247FBaD) |
+| WikshiLiquidationRouter | `0x9D9ab114B3D336319d08dB235c501Ac23C72dcFF` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x9D9ab114B3D336319d08dB235c501Ac23C72dcFF) |
+| PaymentTracker | `0x1A978Ce96f3c52E8cd7e6bdCB66ECc4BcF7f96a7` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x1A978Ce96f3c52E8cd7e6bdCB66ECc4BcF7f96a7) |
+
+### Market 1: WCTC / USD-TCoin
 
 | Parameter | Value |
 |-----------|-------|
@@ -32,5 +45,14 @@ Deployment records for the Wikshi Protocol.
 | Max Credit LLTV | 90% (111% collateral ratio) |
 | IRM | ~2% base, ~4% slope1, ~75% slope2, 80% kink |
 | Protocol Fee | 5% |
+
+### Market 2: wREC / USDT (RWA Receivables)
+
+| Parameter | Value |
+|-----------|-------|
+| Base LLTV | 70% (143% collateral ratio) |
+| Collateral | wREC (wrapped receivable ERC-20) |
+| Oracle | WikshiReceivableOracle (credit-adjusted DCF) |
+| IRM | Shared with Market 1 |
 
 See `creditcoin-testnet.json` for the full deployment record.
