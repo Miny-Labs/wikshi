@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/wikshi-logo.svg" alt="Wikshi Protocol" width="320" />
+  <img src="docs/wikshi-logo.svg" alt="Wikshi Protocol" width="480" />
 </p>
 <p align="center"><strong>Credit-native lending on Creditcoin — where your repayment history unlocks better terms.</strong></p>
 
