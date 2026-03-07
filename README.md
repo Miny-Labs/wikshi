@@ -4,6 +4,10 @@
 <p align="center"><strong>Credit-native lending on Creditcoin — where your repayment history unlocks better terms.</strong></p>
 
 <p align="center">
+  <a href="https://wikshi.xyz"><strong>wikshi.xyz</strong></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/License-BUSL%201.1-blue.svg" alt="License: BUSL-1.1" />
   <img src="https://img.shields.io/badge/Solidity-0.8.26-363636.svg" alt="Solidity" />
   <img src="https://img.shields.io/badge/Tests-325%20passing-brightgreen.svg" alt="Tests" />
@@ -13,7 +17,9 @@
 </p>
 
 <p align="center">
-  <a href="https://drive.google.com/file/d/1IqtJ-E4RCDSaa711c8sYqI2qJ_5jA3RU/view?usp=sharing"><strong>Read the Whitepaper</strong></a>
+  <a href="https://wikshi.xyz"><strong>Live App</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://drive.google.com/file/d/1IqtJ-E4RCDSaa711c8sYqI2qJ_5jA3RU/view?usp=sharing"><strong>Whitepaper</strong></a>
   &nbsp;·&nbsp;
   <a href="https://drive.google.com/file/d/1BLQNU-XVLX7kMZvyo_RNl05G_nIBi1KQ/view?usp=sharing"><strong>Pitch Deck (EN)</strong></a>
   &nbsp;·&nbsp;
