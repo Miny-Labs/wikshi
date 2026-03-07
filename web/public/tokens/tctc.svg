@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <circle cx="32" cy="32" r="32" fill="#0D1B2A"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#00D4AA" stroke-width="2"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#00D4AA" stroke-width="0.5" opacity="0.3"/>
+  <path d="M32 14C22.059 14 14 22.059 14 32s8.059 18 18 18c4.97 0 9.47-2.015 12.728-5.272" stroke="#00D4AA" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M44.728 26.272A17.93 17.93 0 0050 32" stroke="#00D4AA" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <text x="32" y="37" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="9" fill="#00D4AA">tCTC</text>
+</svg>

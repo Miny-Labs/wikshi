@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <circle cx="32" cy="32" r="32" fill="#00D4AA"/>
+  <circle cx="32" cy="32" r="28" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.3"/>
+  <path d="M32 14C22.059 14 14 22.059 14 32s8.059 18 18 18c4.97 0 9.47-2.015 12.728-5.272" stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M44.728 26.272A17.93 17.93 0 0050 32" stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <text x="32" y="37" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="11" fill="#fff">CTC</text>
+</svg>

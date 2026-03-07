@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --marquee-duration: 12s;
+  }
+}
+
+@layer utilities {
+  .text-outline {
+    -webkit-text-stroke: 1.8px #111;
+    color: transparent;
+  }
+}
+
+/* Space Grotesk loaded via next/font, CSS var --font-space */
+.font-display-sans,
+.font-display-serif,
+.font-space {
+  font-family: var(--font-space), 'Space Grotesk', sans-serif;
+}
+
+/* Base font applies to everything else */
+body {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #111111;
+}
+
+body {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+/* Marquee ticker animation */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  animation: marquee-scroll 20s linear infinite;
+  will-change: transform;
+}
+
+/* ===== APP DARK THEME ===== */
+
+.theme-app {
+  --app-bg: #0e0e12;
+  --app-card: #1e1a35;
+  --app-card-hover: #2A2450;
+  --app-border: #3D3565;
+  --app-border-hover: rgba(200, 182, 240, 0.2);
+  --app-text: #f0eef5;
+  --app-text-muted: #abadd0;
+  --app-text-dim: #6a6590;
+  --app-accent: #c8b6f0;
+  --app-gold: #E8A838;
+  --app-purple: #8a7ece;
+  --app-red: #EF4444;
+  --app-green: #22C55E;
+  background: linear-gradient(180deg, #12101e 0%, #0e0e12 30%, #0e0e12 70%, #12101e 100%);
+  background-attachment: fixed;
+  color: var(--app-text);
+}
+
+/* Subtle radial glow at top of content area */
+.app-content-glow {
+  position: relative;
+}
+.app-content-glow::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(200,182,240,0.035) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Demo data indicator badge */
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(232,168,56,0.12);
+  border: 1px solid rgba(232,168,56,0.25);
+  color: #E8A838;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Accent top border for stat cards */
+.accent-border-top {
+  position: relative;
+  overflow: hidden;
+}
+.accent-border-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-color, #c8b6f0), transparent);
+  opacity: 0.6;
+}
+
+/* View Transitions API — cinematic route changes */
+::view-transition-old(root) {
+  animation: vt-fade-out 0.25s ease-in forwards;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 0.25s ease-out forwards;
+}
+@keyframes vt-fade-out {
+  to { opacity: 0; transform: scale(0.98) translateY(-6px); }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; transform: scale(0.98) translateY(6px); }
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(30, 26, 53, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 182, 240, 0.1);
+  border-radius: 16px;
+}
+
+/* Gradient border glow */
+.card-glow {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, #c8b6f0, #3D3565);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+}
+
+/* Noise overlay for depth */
+.noise-bg {
+  position: relative;
+}
+.noise-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  border-radius: inherit;
+}
+
+/* Animated gradient background */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animated-gradient {
+  background: linear-gradient(-45deg, #0e0e12, #1e1a35, rgba(200, 182, 240, 0.08), #0e0e12);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Shimmer skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1e1a35 25%, #3D3565 50%, #1e1a35 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Financial number formatting */
+.financial-number {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-inter), monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Pulsing live indicator */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+.pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+/* Dark scrollbar */
+.theme-app ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.theme-app ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.theme-app ::-webkit-scrollbar-thumb {
+  background: #3D3565;
+  border-radius: 3px;
+}
+.theme-app ::-webkit-scrollbar-thumb:hover {
+  background: #4a4575;
+}
+
+/* Text outline for dark theme (teal/white stroke) */
+.text-outline-dark {
+  -webkit-text-stroke: 1.8px #c8b6f0;
+  color: transparent;
+}

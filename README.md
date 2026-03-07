@@ -324,6 +324,14 @@ Vendor contracts (`USCBase.sol`, `EvmV1Decoder.sol`, `VerifierInterface.sol`, `C
 
 ---
 
+## Frontend
+
+**Live at [wikshi.xyz](https://wikshi.xyz)** — a Next.js app with interactive product tour covering all protocol features.
+
+See [`web/README.md`](web/README.md) for frontend documentation and setup.
+
+---
+
 ## Getting Started
 
 ```bash
@@ -376,6 +384,7 @@ wikshi/
 │   ├── periphery/       # IRM, oracle, multicall, liquidation router, payment tracker
 │   ├── vendor/          # Creditcoin USC precompile wrappers (from gluwa/usc-testnet-bridge-examples)
 │   └── mocks/           # Test-only mock contracts
+├── web/                 # Frontend app (Next.js 16, live at wikshi.xyz)
 ├── test/                # Unit test suite (Hardhat + Chai)
 ├── scripts/             # Deployment and integration test scripts
 ├── deployments/         # Deployment records with contract addresses
