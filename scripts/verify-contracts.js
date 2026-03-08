@@ -45,8 +45,8 @@ const contracts = [
     address: "0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2",
     args: [
       DEPLOYER,
-      "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8", // USD-TCoin
-      "Wikshi USD-TCoin Vault",
+      "0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F", // USDT
+      "Wikshi USDT Vault",
       "wUSDT",
       "0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73", // WikshiLend
     ],
