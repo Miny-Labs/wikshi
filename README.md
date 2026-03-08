@@ -270,7 +270,7 @@ All contracts are **source-verified** on [Blockscout](https://explorer.usc-testn
 |----------|---------|----------|
 | **WikshiLend** | `0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73) |
 | **WikshiCreditOracle** | `0x7002a4528B957Aa16F1a3187031b35DA08E81ECa` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x7002a4528B957Aa16F1a3187031b35DA08E81ECa) |
-| **WikshiVault** | `0x84A7992798ac855185742E014E0488831FbEBce2` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x84A7992798ac855185742E014E0488831FbEBce2) |
+| **WikshiVault** | `0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2) |
 | **WikshiCreditSBT** | `0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1) |
 | **WikshiIrm** | `0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa) |
 | **WikshiOracle** | `0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6` | [View](https://explorer.usc-testnet2.creditcoin.network/address/0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6) |

@@ -8,8 +8,8 @@ export const WIKSHI_CONTRACTS = [
   {
     name: "WikshiVault",
     subtitle: "(ERC-4626 Vault)",
-    address: "0x84A7...Bce2",
-    link: "https://explorer.usc-testnet2.creditcoin.network/address/0x84A7992798ac855185742E014E0488831FbEBce2"
+    address: "0xaf1A...7Cf2",
+    link: "https://explorer.usc-testnet2.creditcoin.network/address/0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2"
   },
   {
     name: "WikshiCreditOracle",

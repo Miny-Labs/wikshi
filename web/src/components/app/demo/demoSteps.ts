@@ -92,7 +92,7 @@ export const DEMO_STEPS: DemoStep[] = [
     svgProps: { token: 'USDT', amount: '25,000', color: '#22C55E', direction: 'deposit' },
     contractLinks: [
       { name: 'WikshiLend', address: '0x186b3Fc15a3404e043D0eb8ecfe0773b82018a73' },
-      { name: 'WikshiVault', address: '0x84A7992798ac855185742E014E0488831FbEBce2' },
+      { name: 'WikshiVault', address: '0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2' },
     ],
   },
   {
@@ -215,7 +215,7 @@ export const DEMO_STEPS: DemoStep[] = [
       { name: 'CreditSBT', address: '0x5d232BE0b2c4E8fc120C2D545F7b7bDdfF577aB1' },
       { name: 'WikshiOracle', address: '0xa5f8E4e9a07F3Ca8f32e16E526810C8E7FBcdff6' },
       { name: 'WikshiIrm', address: '0xAbC2933B07C94bd4e3BB265B70Cea4f62B408fCa' },
-      { name: 'WikshiVault', address: '0x84A7992798ac855185742E014E0488831FbEBce2' },
+      { name: 'WikshiVault', address: '0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2' },
       { name: 'Multicall', address: '0x404a45a33E7bDf066D7DF7d8e56Ec9b0eEad5005' },
       { name: 'WCTC', address: '0x9A1F674108286906cDB25CfbF7Bd538131492435' },
       { name: 'USDT', address: '0x2BA65253Fc2c20fdfaa1FA5EE13bDA57cfDBC30F' },

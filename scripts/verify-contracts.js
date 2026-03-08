@@ -42,7 +42,7 @@ const contracts = [
   },
   {
     name: "WikshiVault",
-    address: "0x84A7992798ac855185742E014E0488831FbEBce2",
+    address: "0xaf1Ac078595AA65498d14df5927e1c4bC2037Cf2",
     args: [
       DEPLOYER,
       "0xa1Cc4d7aa040eA903fd00c13E7b43f8e26cbB7F8", // USD-TCoin
